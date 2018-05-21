@@ -107,6 +107,9 @@ public class BookProvider extends ContentProvider {
 
         long inserted_row = db.insert(BookContract.BookEntry.TABLE_NAME, null, values);
 
+        if (getContext() != null) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
         return ContentUris.withAppendedId(uri, inserted_row);
 
 
@@ -119,18 +122,26 @@ public class BookProvider extends ContentProvider {
         int match = sUrimatcher.match(uri);
 
         SQLiteDatabase db = bookDbHelper.getWritableDatabase();
-
+        int rows_deteled;
         switch (match) {
 
             case BookContract.BOOKS:
-                return db.delete(BookContract.BookEntry.TABLE_NAME, selection, selectionArgs);
+                rows_deteled = db.delete(BookContract.BookEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             case BookContract.BOOK_ID:
                 selection = BookContract.BookEntry.COL_BOOK_ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return db.delete(BookContract.BookEntry.TABLE_NAME, selection, selectionArgs);
+                rows_deteled = db.delete(BookContract.BookEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("deletion is not supported for" + uri);
         }
+
+        if (getContext() != null) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return rows_deteled;
     }
 
     @Override
@@ -199,6 +210,9 @@ public class BookProvider extends ContentProvider {
             if (supplierPhone == null) {
                 throw new IllegalArgumentException("suppliers phone is necessary" + uri);
             }
+        }
+        if (getContext() != null) {
+            getContext().getContentResolver().notifyChange(uri, null);
         }
         return db.update(BookContract.BookEntry.TABLE_NAME, values, selection, selectionArgs);
 
