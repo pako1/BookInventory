@@ -50,11 +50,15 @@ public class CursorBookAdapter extends CursorAdapter {
         holder.buyButtonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int newQuantity = quantity - 1;
-                ContentValues values = new ContentValues();
-                values.put(BookContract.BookEntry.COL_BOOK_QUANTITY, newQuantity);
-                context.getContentResolver().update(currentUri, values, null, null);
-                context.getContentResolver().notifyChange(currentUri, null);
+                if (quantity>0) {
+                    int newQuantity = quantity - 1;
+                    ContentValues values = new ContentValues();
+
+                    values.put(BookContract.BookEntry.COL_BOOK_QUANTITY, newQuantity);
+
+                    context.getContentResolver().update(currentUri, values, null, null);
+                    context.getContentResolver().notifyChange(currentUri, null);
+                }
             }
         });
     }

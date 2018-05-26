@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.example.kaelxin.bookinventory.data.BookContract;
+import com.example.kaelxin.bookinventory.data.MyQueryHandler;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +32,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
     private static final int PET_LOADER = 0;
 
+    private MyQueryHandler myQueryHandler;
 
     @Override
 
@@ -77,7 +79,8 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     }
 
     private void deleteAll() {
-        getContentResolver().delete(BookContract.BookEntry.CONTENT_URI, null, null);
+        myQueryHandler = new MyQueryHandler(getContentResolver());
+        myQueryHandler.startDelete(0, null, BookContract.BookEntry.CONTENT_URI, null, null);
     }
 
     private void insertBook() {
@@ -90,7 +93,12 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         values.put(BookContract.BookEntry.COL_SUPPLIER_NAME, "Xiao mao");
         values.put(BookContract.BookEntry.COL_SUPPLIER_PHONE, "6946537855");
 
-        getContentResolver().insert(BookContract.BookEntry.CONTENT_URI, values);
+
+        myQueryHandler = new MyQueryHandler(getContentResolver());
+
+        myQueryHandler.startInsert(0, null, BookContract.BookEntry.CONTENT_URI, values);
+
+
     }
 
 
