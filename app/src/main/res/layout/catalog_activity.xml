@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context="com.example.kaelxin.bookinventory.CatalogActivity">
 
+    <ListView
+        android:id="@+id/book_ListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="6dp" />
+
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/empty_view"
         android:layout_width="match_parent"
@@ -53,20 +60,14 @@
             app:layout_constraintTop_toBottomOf="@+id/empty_inventory_text" />
     </android.support.constraint.ConstraintLayout>
 
-    <ListView
-        android:id="@+id/book_ListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="6dp" />
-
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingbutton"
+        android:id="@+id/floating_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/edit"
-        app:backgroundTint="#41BBAC"
+        app:backgroundTint="@color/manual_insertcolor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

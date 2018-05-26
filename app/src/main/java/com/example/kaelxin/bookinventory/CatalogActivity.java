@@ -28,6 +28,9 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     @BindView(R.id.empty_view)
     View emptyView;
 
+    @BindView(R.id.floating_button)
+    FloatingActionButton fab;
+
     private CursorBookAdapter cursorBookAdapter;
 
     private static final int PET_LOADER = 0;
@@ -40,7 +43,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.catalog_activity);
         ButterKnife.bind(this);
-        FloatingActionButton fab = new FloatingActionButton(this);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,18 +57,17 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
         getLoaderManager().initLoader(PET_LOADER, null, this);
 
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.catalog_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.dummy_insert:
                 insertBook();
@@ -84,7 +86,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     }
 
     private void insertBook() {
-
         ContentValues values = new ContentValues();
 
         values.put(BookContract.BookEntry.COL_BOOK_NAME, "big blue");
@@ -93,18 +94,13 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         values.put(BookContract.BookEntry.COL_SUPPLIER_NAME, "Xiao mao");
         values.put(BookContract.BookEntry.COL_SUPPLIER_PHONE, "6946537855");
 
-
         myQueryHandler = new MyQueryHandler(getContentResolver());
 
         myQueryHandler.startInsert(0, null, BookContract.BookEntry.CONTENT_URI, values);
-
-
     }
-
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
         String projection[] = {
                 BookContract.BookEntry.COL_BOOK_ID,
                 BookContract.BookEntry.COL_BOOK_NAME,
@@ -122,9 +118,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-
         cursorBookAdapter.swapCursor(cursor);
-
     }
 
     @Override

@@ -22,4 +22,6 @@
     <string name="cv_image_of_the_book">image book</string>
     <string name="buy">buy</string>
     <string name="money">$</string>
+    <string name="delete_book">delete book</string>
+    <string name="save_book">save</string>
 </resources>

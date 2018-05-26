@@ -7,4 +7,5 @@
     <color name="grey_emptytext_color">#CCCCCC</color>
     <color name="white">#ffffff</color>
     <color name="buycolor">#FF4D00</color>
+    <color name="manual_insertcolor">#41BBAC</color>
 </resources>
