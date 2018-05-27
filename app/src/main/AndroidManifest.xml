@@ -16,7 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.kaelxin.bookinventory.DetailsActivity" />
+        <activity android:name="com.example.kaelxin.bookinventory.DetailsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.kaelxin.bookinventory.CatalogActivity" />
+        </activity>
 
         <provider
             android:name="com.example.kaelxin.bookinventory.data.BookProvider"

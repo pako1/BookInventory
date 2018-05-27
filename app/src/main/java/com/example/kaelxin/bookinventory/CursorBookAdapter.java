@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 public class CursorBookAdapter extends CursorAdapter {
 
 
-    public CursorBookAdapter(Context context, Cursor c) {
+    CursorBookAdapter(Context context, Cursor c) {
         super(context, c, 0);
     }
 
@@ -61,6 +61,10 @@ public class CursorBookAdapter extends CursorAdapter {
                 }
             }
         });
+
+
+
+
     }
 
     static class ViewHolder {

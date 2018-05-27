@@ -1,6 +1,7 @@
 package com.example.kaelxin.bookinventory;
 
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -12,10 +13,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.kaelxin.bookinventory.data.BookContract;
 import com.example.kaelxin.bookinventory.data.MyQueryHandler;
+
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +37,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
     private CursorBookAdapter cursorBookAdapter;
 
-    private static final int PET_LOADER = 0;
+    private static final int BOOK_LOADER = 0;
 
     private MyQueryHandler myQueryHandler;
 
@@ -55,8 +59,17 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         cursorBookAdapter = new CursorBookAdapter(this, null);
         listView.setAdapter(cursorBookAdapter);
 
-        getLoaderManager().initLoader(PET_LOADER, null, this);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent bookDetailsIntent = new Intent(CatalogActivity.this, DetailsActivity.class);
+                bookDetailsIntent.setData(ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, id));
+                startActivity(bookDetailsIntent);
+            }
+        });
+
+        getLoaderManager().initLoader(BOOK_LOADER, null, this);
 
     }
 
@@ -87,12 +100,23 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
     private void insertBook() {
         ContentValues values = new ContentValues();
+        final Double[] prices = new Double[]{32.2, 30.2, 12.2, 38.2, 22.2};
+        final String[] names = new String[]{"Marios alven", "helen dido", "fil katz", "Bill kotslo", "Kiko livo"};
+        final String[] books = new String[]{"The end of time", "hey lady", "food & love", "android for dummies", "Fif livo"};
+        final String[] phones = new String[]{"6946537855", "6946537855", "6946537322", "6943537833", "6946000854"};
+        Random rand = new Random();
 
-        values.put(BookContract.BookEntry.COL_BOOK_NAME, "big blue");
-        values.put(BookContract.BookEntry.COL_BOOK_QUANTITY, 13);
-        values.put(BookContract.BookEntry.COL_BOOK_PRICE, 32.2);
-        values.put(BookContract.BookEntry.COL_SUPPLIER_NAME, "Xiao mao");
-        values.put(BookContract.BookEntry.COL_SUPPLIER_PHONE, "6946537855");
+        String name = names[rand.nextInt(names.length)];
+        Double price = prices[rand.nextInt(prices.length)];
+        String book = books[rand.nextInt(books.length)];
+        String phone = phones[rand.nextInt(phones.length)];
+        int quantity = rand.nextInt(10) + 1;
+
+        values.put(BookContract.BookEntry.COL_BOOK_NAME, book);
+        values.put(BookContract.BookEntry.COL_BOOK_QUANTITY, quantity);
+        values.put(BookContract.BookEntry.COL_BOOK_PRICE, price);
+        values.put(BookContract.BookEntry.COL_SUPPLIER_NAME, name);
+        values.put(BookContract.BookEntry.COL_SUPPLIER_PHONE, phone);
 
         myQueryHandler = new MyQueryHandler(getContentResolver());
 

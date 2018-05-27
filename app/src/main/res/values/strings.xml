@@ -24,4 +24,9 @@
     <string name="money">$</string>
     <string name="delete_book">delete book</string>
     <string name="save_book">save</string>
+    <string name="new_book">Add new Book</string>
+    <string name="existing_book">Edit book</string>
+    <string name="discard_or_edit">Discard your changes and quit editing?</string>
+    <string name="keep_edit">Keep editing</string>
+    <string name="discard">Discard</string>
 </resources>
