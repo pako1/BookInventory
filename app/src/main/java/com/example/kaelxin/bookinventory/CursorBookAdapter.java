@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kaelxin.bookinventory.data.BookContract;
 
@@ -50,7 +51,7 @@ public class CursorBookAdapter extends CursorAdapter {
         holder.buyButtonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (quantity>0) {
+                if (quantity > 0) {
                     int newQuantity = quantity - 1;
                     ContentValues values = new ContentValues();
 
@@ -58,11 +59,11 @@ public class CursorBookAdapter extends CursorAdapter {
 
                     context.getContentResolver().update(currentUri, values, null, null);
                     context.getContentResolver().notifyChange(currentUri, null);
+                } else {
+                    Toast.makeText(context, R.string.outofstock, Toast.LENGTH_LONG).show();
                 }
             }
         });
-
-
 
 
     }

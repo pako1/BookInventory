@@ -29,4 +29,6 @@
     <string name="discard_or_edit">Discard your changes and quit editing?</string>
     <string name="keep_edit">Keep editing</string>
     <string name="discard">Discard</string>
+    <string name="cant_negativequant">Cant have negative quantity</string>
+    <string name="outofstock">Out of stock</string>
 </resources>

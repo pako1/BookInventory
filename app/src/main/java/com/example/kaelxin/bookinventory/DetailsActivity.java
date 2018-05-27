@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.kaelxin.bookinventory.data.BookContract;
 import com.example.kaelxin.bookinventory.data.MyQueryHandler;
@@ -37,11 +39,16 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     EditText editTextSuppName;
     @BindView(R.id.edit_supp_phone_id)
     EditText editTextSuppPhone;
+    @BindView(R.id.plusButtonID)
+    ImageButton plusButton;
+    @BindView(R.id.minusButtonID)
+    ImageButton minusButton;
 
     private Uri currentUri;
     private static final int MAGIC_ZERO = 0;
     private static final int BOOK_LOADER = 0;
     private boolean mBookHasChanged = false;
+    private int quantit = 0;
 
     private View.OnTouchListener touchListener = new View.OnTouchListener() {
         @Override
@@ -75,6 +82,45 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         editTextBookPrice.setOnTouchListener(touchListener);
         editTextSuppName.setOnTouchListener(touchListener);
         editTextSuppPhone.setOnTouchListener(touchListener);
+
+        plusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (currentUri != null) {
+                    Integer quantity = Integer.parseInt(editTextQuantity.getText().toString());
+                    quantity++;
+                    editTextQuantity.setText(String.valueOf(quantity));
+                    mBookHasChanged = true;
+                } else {
+                    quantit++;
+                    editTextQuantity.setText(String.valueOf(quantit));
+                }
+            }
+        });
+
+        minusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentUri != null) {
+                    Integer quantity = Integer.parseInt(editTextQuantity.getText().toString());
+                    if (quantity > 0) {
+                        quantity--;
+                        editTextQuantity.setText(String.valueOf(quantity));
+                        mBookHasChanged = true;
+                    } else {
+                        Toast.makeText(DetailsActivity.this, R.string.cant_negativequant, Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    if (quantit > 0) {
+                        quantit--;
+                        editTextQuantity.setText(String.valueOf(quantit));
+                    } else {
+                        Toast.makeText(DetailsActivity.this, R.string.cant_negativequant, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
 
     }
 
