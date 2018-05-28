@@ -24,6 +24,8 @@ import android.widget.Toast;
 import com.example.kaelxin.bookinventory.data.BookContract;
 import com.example.kaelxin.bookinventory.data.MyQueryHandler;
 
+import java.util.regex.Pattern;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -43,12 +45,14 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     ImageButton plusButton;
     @BindView(R.id.minusButtonID)
     ImageButton minusButton;
+    @BindView(R.id.addimagebutton)
+    ImageButton addImageButton;
 
     private Uri currentUri;
     private static final int MAGIC_ZERO = 0;
     private static final int BOOK_LOADER = 0;
     private boolean mBookHasChanged = false;
-    private int quantit = 0;
+    private int quantity_it = 0;
 
     private View.OnTouchListener touchListener = new View.OnTouchListener() {
         @Override
@@ -57,7 +61,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             return false;
         }
     };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +96,8 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                     editTextQuantity.setText(String.valueOf(quantity));
                     mBookHasChanged = true;
                 } else {
-                    quantit++;
-                    editTextQuantity.setText(String.valueOf(quantit));
+                    quantity_it++;
+                    editTextQuantity.setText(String.valueOf(quantity_it));
                 }
             }
         });
@@ -109,19 +112,25 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                         editTextQuantity.setText(String.valueOf(quantity));
                         mBookHasChanged = true;
                     } else {
-                        Toast.makeText(DetailsActivity.this, R.string.cant_negativequant, Toast.LENGTH_LONG).show();
+                        Toast.makeText(DetailsActivity.this, R.string.cannot_negativequant, Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    if (quantit > 0) {
-                        quantit--;
-                        editTextQuantity.setText(String.valueOf(quantit));
+                    if (quantity_it > 0) {
+                        quantity_it--;
+                        editTextQuantity.setText(String.valueOf(quantity_it));
                     } else {
-                        Toast.makeText(DetailsActivity.this, R.string.cant_negativequant, Toast.LENGTH_LONG).show();
+                        Toast.makeText(DetailsActivity.this, R.string.cannot_negativequant, Toast.LENGTH_LONG).show();
                     }
                 }
             }
         });
 
+        addImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     //this creates the menu options
@@ -139,6 +148,8 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         if (currentUri == null) {
             MenuItem menuItem = menu.findItem(R.id.delete_book);
             menuItem.setVisible(false);
+            MenuItem menuItem1 = menu.findItem(R.id.call);
+            menuItem1.setVisible(false);
         }
         return true;
     }
@@ -148,11 +159,20 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
         switch (item.getItemId()) {
             case R.id.save:
-                insertBookEntry();
-                finish();
+                if (insertBookEntry()) {
+                    finish();
+                }
                 return true;
             case R.id.delete_book:
                 showDeleteConfirmationDialog();
+                return true;
+            case R.id.call:
+                String calling_number = editTextSuppPhone.getText().toString();
+                if (isPhoneValid(calling_number)) {
+                    Uri call = Uri.parse("tel:" + calling_number);
+                    Intent callIntent = new Intent(Intent.ACTION_DIAL, call);
+                    startActivity(callIntent);
+                }
                 return true;
             case android.R.id.home:
                 if (!mBookHasChanged) {
@@ -167,7 +187,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                                 NavUtils.navigateUpFromSameTask(DetailsActivity.this);
                             }
                         };
-
                 // Show a dialog that notifies the user they have unsaved changes
                 showUnsavedChanges(discardButtonClickListener);
                 return true;
@@ -177,7 +196,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
     @Override
     public void onBackPressed() {
-
         if (!mBookHasChanged) {
             NavUtils.navigateUpFromSameTask(DetailsActivity.this);
             return;
@@ -189,10 +207,9 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             }
         };
         showUnsavedChanges(discardButtonClickListener);
-
     }
 
-    private void insertBookEntry() {
+    private boolean insertBookEntry() {
 
         String bookName = editTextBookName.getText().toString().trim();
         String bookPrice = editTextBookPrice.getText().toString().trim();
@@ -206,36 +223,69 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                 ) {
             // Since no fields were modified, we can return early without creating a new pet.
             // No need to create ContentValues and no need to do any ContentProvider operations.
-            return;
+            return true;
         }
 
         ContentValues values = new ContentValues();
-
-        values.put(BookContract.BookEntry.COL_BOOK_NAME, bookName);
+        if (bookName.equals("")) {
+            editTextBookName.setError(getString(R.string.error_nedname));
+            return false;
+        } else {
+            values.put(BookContract.BookEntry.COL_BOOK_NAME, bookName);
+        }
         values.put(BookContract.BookEntry.COL_BOOK_PRICE, bookPrice);
         values.put(BookContract.BookEntry.COL_BOOK_QUANTITY, bookQuantity);
-        values.put(BookContract.BookEntry.COL_SUPPLIER_NAME, supplierName);
-        values.put(BookContract.BookEntry.COL_SUPPLIER_PHONE, supplierPhone);
+        if (supplierName.equals("")) {
+            editTextSuppName.setError(getString(R.string.errsupname));
+            return false;
+        } else {
+            values.put(BookContract.BookEntry.COL_SUPPLIER_NAME, supplierName);
+        }
+        if (supplierPhone.equals("")) {
+            editTextSuppPhone.setError(getString(R.string.errsupphone));
+            return false;
+        } else {
+            if (isPhoneValid(supplierPhone)) {
+                values.put(BookContract.BookEntry.COL_SUPPLIER_PHONE, supplierPhone);
+            } else {
+                editTextSuppPhone.setError(getString(R.string.invalphone));
+                return false;
+            }
+        }
         MyQueryHandler handler = new MyQueryHandler(getContentResolver());
 
         // this is a new pet that we are gonna add to the database
         if (currentUri == null) {
-
-
             handler.startInsert(MAGIC_ZERO, null, BookContract.BookEntry.CONTENT_URI, values);
+            return true;
         } else {
             //this pet already exists so we will update it
-
-            handler.startUpdate(MAGIC_ZERO, null, BookContract.BookEntry.CONTENT_URI, values, null, null);
+            handler.startUpdate(MAGIC_ZERO, null, currentUri, values, null, null);
+            return true;
         }
+    }
+
+    private boolean isPhoneValid(String phoneNumber) {
+
+        boolean check;
+        if (!Pattern.matches("[a-zA-Z]+", phoneNumber)) {
+            if (phoneNumber.length() < 6 || phoneNumber.length() > 13) {
+                check = false;
+            } else {
+                check = true;
+            }
+        } else {
+            check = false;
+        }
+        return check;
     }
 
     private void showDeleteConfirmationDialog() {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
-        alertDialogBuilder.setMessage("Are you sure you want to delete that entry?");
-        alertDialogBuilder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setMessage(R.string.sure_todo);
+        alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (currentUri != null) {
@@ -245,7 +295,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                 }
             }
         });
-        alertDialogBuilder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (dialog != null) {
@@ -256,7 +306,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-
     }
 
     private void showUnsavedChanges(DialogInterface.OnClickListener discardButtonClickListener) {
@@ -273,7 +322,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         AlertDialog alertDialog = alertBuilder.create();
         alertDialog.show();
     }
-
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -323,8 +371,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             editTextSuppName.setText(supplierName);
             editTextSuppPhone.setText(supplierPhone);
         }
-
-
     }
 
     @Override
@@ -334,7 +380,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         editTextQuantity.getText().clear();
         editTextSuppName.getText().clear();
         editTextSuppPhone.getText().clear();
-
 
     }
 }

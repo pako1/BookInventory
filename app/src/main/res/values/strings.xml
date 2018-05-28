@@ -29,6 +29,15 @@
     <string name="discard_or_edit">Discard your changes and quit editing?</string>
     <string name="keep_edit">Keep editing</string>
     <string name="discard">Discard</string>
-    <string name="cant_negativequant">Cant have negative quantity</string>
+    <string name="cannot_negativequant">Can not have negative quantity</string>
     <string name="outofstock">Out of stock</string>
+    <string name="book_cover">Book cover</string>
+    <string name="call_supplier">call supplier</string>
+    <string name="sure_todo">Are you sure you want to delete that entry?</string>
+    <string name="error_nedname">book needs a name</string>
+    <string name="errsupname">supplier needs a name</string>
+    <string name="errsupphone">Phone number is needed</string>
+    <string name="invalphone">Invalid phone number</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
 </resources>

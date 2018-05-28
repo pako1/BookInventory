@@ -10,7 +10,7 @@ public class BookDbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
 
-    public BookDbHelper(Context context) {
+    BookDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

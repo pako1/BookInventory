@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kaelxin.bookinventory.data.BookContract;
+import com.example.kaelxin.bookinventory.data.MyQueryHandler;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,6 +22,7 @@ import butterknife.ButterKnife;
 
 public class CursorBookAdapter extends CursorAdapter {
 
+    private static final int MAGIC_ZERO = 0;
 
     CursorBookAdapter(Context context, Cursor c) {
         super(context, c, 0);
@@ -57,8 +59,10 @@ public class CursorBookAdapter extends CursorAdapter {
 
                     values.put(BookContract.BookEntry.COL_BOOK_QUANTITY, newQuantity);
 
-                    context.getContentResolver().update(currentUri, values, null, null);
+                    MyQueryHandler myQueryHandler = new MyQueryHandler(context.getContentResolver());
+                    myQueryHandler.startUpdate(MAGIC_ZERO, null, currentUri, values, null, null);
                     context.getContentResolver().notifyChange(currentUri, null);
+
                 } else {
                     Toast.makeText(context, R.string.outofstock, Toast.LENGTH_LONG).show();
                 }

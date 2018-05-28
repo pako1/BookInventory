@@ -6,12 +6,17 @@
         android:id="@+id/save"
         android:icon="@drawable/check_black"
         android:title="@string/save_book"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/delete_book"
         android:title="@string/delete_book"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/call"
+        android:icon="@drawable/ic_call_black_24dp"
+        android:title="@string/call_supplier"
+        app:showAsAction="always" />
 
 </menu>
