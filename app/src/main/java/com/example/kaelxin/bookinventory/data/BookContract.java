@@ -36,6 +36,7 @@ public class BookContract {
         public static final String COL_BOOK_PRICE = "price";
         public static final String COL_SUPPLIER_NAME = "supplier";
         public static final String COL_SUPPLIER_PHONE = "phone";
+        public static final String COL_BOOK_IMAGE = "image";
 
     }
 

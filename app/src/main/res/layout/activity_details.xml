@@ -11,9 +11,9 @@
         tools:context="com.example.kaelxin.bookinventory.DetailsActivity">
 
         <ImageView
-            android:id="@+id/textView5"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:id="@+id/imageView"
+            android:layout_width="190dp"
+            android:layout_height="160dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
@@ -30,7 +30,7 @@
             android:layout_marginTop="120dp"
             android:background="@drawable/ic_add_a_photo_black_24dp"
             android:contentDescription="@string/books_image_or_else_cover"
-            app:layout_constraintStart_toEndOf="@+id/textView5"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView

@@ -8,22 +8,29 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.kaelxin.bookinventory.data.BookContract;
 import com.example.kaelxin.bookinventory.data.MyQueryHandler;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
@@ -47,12 +54,17 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     ImageButton minusButton;
     @BindView(R.id.addimagebutton)
     ImageButton addImageButton;
+    @BindView(R.id.imageView)
+    ImageView bookImage;
 
     private Uri currentUri;
     private static final int MAGIC_ZERO = 0;
     private static final int BOOK_LOADER = 0;
+    private static final int REQUEST_IMAGE_CODE = 1;
     private boolean mBookHasChanged = false;
     private int quantity_it = 0;
+    private Uri imageUri;
+
 
     private View.OnTouchListener touchListener = new View.OnTouchListener() {
         @Override
@@ -68,7 +80,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         currentUri = intent.getData();
         //this means that we have a new book to insert
         if (currentUri == null) {
@@ -128,9 +140,79 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         addImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent imageIntent = new Intent(Intent.ACTION_PICK);
+                imageIntent.setType("image/*");
+                startActivityForResult(imageIntent, REQUEST_IMAGE_CODE);
+                mBookHasChanged = true;
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageData) {
+        super.onActivityResult(requestCode, resultCode, imageData);
+
+        if (resultCode == requestCode) {
+            if (requestCode == RESULT_OK) {
+                imageUri = imageData.getData();
+
+                Log.i("malaka", imageUri.toString());
+
+                bookImage.setImageBitmap(getBitMapFromUri(imageUri));
+            }
+        }
+    }
+
+    public Bitmap getBitMapFromUri(Uri imageUri) {
+
+        if (imageUri == null || TextUtils.isEmpty(imageUri.toString())) {
+            return null;
+        }
+        //get dimensions of the image
+        int imageWidth = bookImage.getWidth();
+        int imageHeight = bookImage.getHeight();
+
+        InputStream inputStream = null;
+        Bitmap bp = null;
+
+        try {
+            inputStream = this.getContentResolver().openInputStream(imageUri);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(inputStream, null, options);
+            inputStream.close();
+
+            int photoWidht = options.outWidth;
+            int photoHeight = options.outHeight;
+
+            int scaleFactor = Math.min(photoWidht / imageWidth, photoHeight / imageHeight);
+
+            options.inJustDecodeBounds = false;
+            options.inSampleSize = scaleFactor;
+            options.inPurgeable = true;
+
+            inputStream = this.getContentResolver().openInputStream(imageUri);
+            bp = BitmapFactory.decodeStream(inputStream, null, options);
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            return bp;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return bp;
     }
 
     //this creates the menu options
@@ -216,11 +298,12 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         String bookQuantity = editTextQuantity.getText().toString().trim();
         String supplierName = editTextSuppName.getText().toString().trim();
         String supplierPhone = editTextSuppPhone.getText().toString().trim();
+        String imageUriBook = imageUri.toString();
 
         // if nothing no field has any input then just return.
         if (currentUri == null && TextUtils.isEmpty(bookName) && TextUtils.isEmpty(bookPrice)
                 && TextUtils.isEmpty(bookQuantity) && TextUtils.isEmpty(supplierName) && TextUtils.isEmpty(supplierPhone)
-                ) {
+                && TextUtils.isEmpty(imageUriBook)) {
             // Since no fields were modified, we can return early without creating a new pet.
             // No need to create ContentValues and no need to do any ContentProvider operations.
             return true;
@@ -252,6 +335,8 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                 return false;
             }
         }
+        values.put(BookContract.BookEntry.COL_BOOK_IMAGE, imageUriBook);
+
         MyQueryHandler handler = new MyQueryHandler(getContentResolver());
 
         // this is a new pet that we are gonna add to the database
@@ -269,11 +354,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
         boolean check;
         if (!Pattern.matches("[a-zA-Z]+", phoneNumber)) {
-            if (phoneNumber.length() < 6 || phoneNumber.length() > 13) {
-                check = false;
-            } else {
-                check = true;
-            }
+            check = phoneNumber.length() >= 6 && phoneNumber.length() <= 13;
         } else {
             check = false;
         }
@@ -332,7 +413,8 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                 BookContract.BookEntry.COL_BOOK_QUANTITY,
                 BookContract.BookEntry.COL_BOOK_PRICE,
                 BookContract.BookEntry.COL_SUPPLIER_NAME,
-                BookContract.BookEntry.COL_SUPPLIER_PHONE
+                BookContract.BookEntry.COL_SUPPLIER_PHONE,
+                BookContract.BookEntry.COL_BOOK_IMAGE
         };
 
         return new CursorLoader(this,
@@ -358,18 +440,21 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             int bookPriceCOLindex = cursor.getColumnIndex(BookContract.BookEntry.COL_BOOK_PRICE);
             int supplierNameCOLindex = cursor.getColumnIndex(BookContract.BookEntry.COL_SUPPLIER_NAME);
             int supplierPhoneCOLindex = cursor.getColumnIndex(BookContract.BookEntry.COL_SUPPLIER_PHONE);
+            int bookImageCOLindex = cursor.getColumnIndex(BookContract.BookEntry.COL_BOOK_IMAGE);
 
             String bookName = cursor.getString(bookNameCOLindex);
             Integer bookQuantity = cursor.getInt(bookQuantityCOLindex);
             Double bookPrice = cursor.getDouble(bookPriceCOLindex);
             String supplierName = cursor.getString(supplierNameCOLindex);
             String supplierPhone = cursor.getString(supplierPhoneCOLindex);
-
+            String bookyImage = cursor.getString(bookImageCOLindex);
+            Uri bookImageUri = Uri.parse(bookyImage);
             editTextBookName.setText(bookName);
             editTextQuantity.setText(String.valueOf(bookQuantity));
             editTextBookPrice.setText(String.valueOf(bookPrice));
             editTextSuppName.setText(supplierName);
             editTextSuppPhone.setText(supplierPhone);
+            bookImage.setImageBitmap(getBitMapFromUri(bookImageUri));
         }
     }
 
@@ -380,6 +465,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         editTextQuantity.getText().clear();
         editTextSuppName.getText().clear();
         editTextSuppPhone.getText().clear();
+        bookImage.setImageResource(0);
 
     }
 }

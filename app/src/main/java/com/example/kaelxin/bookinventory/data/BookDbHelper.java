@@ -23,7 +23,9 @@ public class BookDbHelper extends SQLiteOpenHelper {
                 + BookContract.BookEntry.COL_BOOK_PRICE + " REAL NOT NULL DEFAULT 0, "
                 + BookContract.BookEntry.COL_BOOK_QUANTITY + " INTEGER NOT NULL DEFAULT 0, "
                 + BookContract.BookEntry.COL_SUPPLIER_NAME + " TEXT NOT NULL, "
-                + BookContract.BookEntry.COL_SUPPLIER_PHONE + " TEXT NOT NULL );";
+                + BookContract.BookEntry.COL_BOOK_IMAGE + " TEXT, "
+                + BookContract.BookEntry.COL_SUPPLIER_PHONE + " TEXT NOT NULL); ";
+
 
         db.execSQL(SQLITE_CREATE_BOOK_TABLE);
 

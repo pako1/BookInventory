@@ -90,13 +90,12 @@ public class BookProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
 
-
         int match = sUrimatcher.match(uri);
         switch (match) {
             case BookContract.BOOKS:
                 return insertBook(uri, values);
             default:
-                throw new IllegalArgumentException("couldnt insert book with uri" + uri);
+                throw new IllegalArgumentException("couldn't insert book with uri" + uri);
         }
 
     }
@@ -173,6 +172,13 @@ public class BookProvider extends ContentProvider {
         // if there is an empty content values then nothing would change so just return that 0 rows have been updated.
         if (values.size() == 0) {
             return 0;
+        }
+
+        if (values.containsKey(BookContract.BookEntry.COL_BOOK_IMAGE)) {
+            String bookImage = values.getAsString(BookContract.BookEntry.COL_BOOK_IMAGE);
+            if (bookImage == null) {
+                throw new IllegalArgumentException("book requires an image" + uri);
+            }
         }
 
         //if you update a entry it could be that you dont update every single column but only a few.

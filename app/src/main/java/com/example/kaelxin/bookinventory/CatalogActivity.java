@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.kaelxin.bookinventory.data.BookContract;
@@ -129,7 +130,8 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 BookContract.BookEntry.COL_BOOK_ID,
                 BookContract.BookEntry.COL_BOOK_NAME,
                 BookContract.BookEntry.COL_BOOK_QUANTITY,
-                BookContract.BookEntry.COL_BOOK_PRICE
+                BookContract.BookEntry.COL_BOOK_PRICE,
+                BookContract.BookEntry.COL_BOOK_IMAGE
         };
 
         return new CursorLoader(this,

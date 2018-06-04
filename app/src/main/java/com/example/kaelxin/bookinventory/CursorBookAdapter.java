@@ -79,8 +79,8 @@ public class CursorBookAdapter extends CursorAdapter {
         TextView bookPriceView;
         @BindView(R.id.cv_book_quantity)
         TextView bookQuantityView;
-        // @BindView(R.id.cv_book_image)
-        // ImageView bookImageView;
+        /*@BindView(R.id.cv_book_image)
+        ImageView bookImageView;*/
         @BindView(R.id.buyButton)
         Button buyButtonView;
 
