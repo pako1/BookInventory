@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -140,7 +141,16 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         addImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent imageIntent = new Intent(Intent.ACTION_PICK);
+
+                Intent imageIntent;
+
+                if (Build.VERSION.SDK_INT < 19) {
+                    imageIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                } else {
+                    imageIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                    imageIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                }
+
                 imageIntent.setType("image/*");
                 startActivityForResult(imageIntent, REQUEST_IMAGE_CODE);
                 mBookHasChanged = true;
@@ -159,7 +169,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         }
     }
 
-    public Bitmap getBitMapFromUri(Uri imageUri) {
+    private Bitmap getBitMapFromUri(Uri imageUri) {
 
         if (imageUri == null || TextUtils.isEmpty(imageUri.toString())) {
             return null;
@@ -442,6 +452,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             String supplierName = cursor.getString(supplierNameCOLindex);
             String supplierPhone = cursor.getString(supplierPhoneCOLindex);
             String bookyImage = cursor.getString(bookImageCOLindex);
+            Log.e("malaka1", bookyImage);
             Uri bookImageUri = Uri.parse(bookyImage);
             editTextBookName.setText(bookName);
             editTextQuantity.setText(String.valueOf(bookQuantity));
