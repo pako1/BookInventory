@@ -152,14 +152,10 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     protected void onActivityResult(int requestCode, int resultCode, Intent imageData) {
         super.onActivityResult(requestCode, resultCode, imageData);
 
-        if (resultCode == requestCode) {
-            if (requestCode == RESULT_OK) {
-                imageUri = imageData.getData();
-
-                Log.i("malaka", imageUri.toString());
-
-                bookImage.setImageBitmap(getBitMapFromUri(imageUri));
-            }
+        if (requestCode == REQUEST_IMAGE_CODE && resultCode == RESULT_OK && imageData != null) {
+            imageUri = imageData.getData();
+            Log.e("malaka", imageUri.toString());
+            bookImage.setImageBitmap(getBitMapFromUri(imageUri));
         }
     }
 
@@ -176,7 +172,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         Bitmap bp = null;
 
         try {
-            inputStream = this.getContentResolver().openInputStream(imageUri);
+            inputStream = getContentResolver().openInputStream(imageUri);
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(inputStream, null, options);
@@ -193,9 +189,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
             inputStream = this.getContentResolver().openInputStream(imageUri);
             bp = BitmapFactory.decodeStream(inputStream, null, options);
-            if (inputStream != null) {
-                inputStream.close();
-            }
+            inputStream.close();
             return bp;
 
         } catch (FileNotFoundException e) {
