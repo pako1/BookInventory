@@ -66,7 +66,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     private int quantity_it = 0;
     private Uri imageUri;
 
-
     private View.OnTouchListener touchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -164,7 +163,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
         if (requestCode == REQUEST_IMAGE_CODE && resultCode == RESULT_OK && imageData != null) {
             imageUri = imageData.getData();
-            Log.e("malaka", imageUri.toString());
             bookImage.setImageBitmap(getBitMapFromUri(imageUri));
         }
     }
@@ -463,7 +461,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             if (bookyImage == null) {
                 bookImage.setImageResource(R.drawable.defaultimage);
             } else {
-                Log.e("malaka1", bookyImage);
                 Uri bookImageUri = Uri.parse(bookyImage);
                 bookImage.setImageBitmap(getBitMapFromUri(bookImageUri));
             }
