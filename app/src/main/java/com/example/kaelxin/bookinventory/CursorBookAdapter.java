@@ -103,7 +103,9 @@ public class CursorBookAdapter extends CursorAdapter {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(inputStream, null, options);
-            inputStream.close();
+            if (inputStream != null) {
+                inputStream.close();
+            }
 
             int photoWidht = options.outWidth;
             int photoHeight = options.outHeight;
@@ -123,7 +125,9 @@ public class CursorBookAdapter extends CursorAdapter {
 
             inputStream = context.getContentResolver().openInputStream(imageUri);
             bp = BitmapFactory.decodeStream(inputStream, null, options);
-            inputStream.close();
+            if (inputStream != null) {
+                inputStream.close();
+            }
             return bp;
 
         } catch (FileNotFoundException e) {

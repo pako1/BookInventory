@@ -12,7 +12,7 @@ public class BookContract {
 
     public static final String CONTENT_AUTHORITY = "com.example.kaelxin.bookinventory";
 
-    static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     public static final String PATH_BOOK = "books";
 

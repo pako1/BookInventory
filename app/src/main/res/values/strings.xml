@@ -40,4 +40,5 @@
     <string name="invalphone">Invalid phone number</string>
     <string name="yes">yes</string>
     <string name="no">no</string>
+    <string name="text20">20</string>
 </resources>

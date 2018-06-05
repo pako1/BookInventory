@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -184,7 +183,9 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(inputStream, null, options);
-            inputStream.close();
+            if (inputStream != null) {
+                inputStream.close();
+            }
 
             int photoWidht = options.outWidth;
             int photoHeight = options.outHeight;
@@ -205,7 +206,9 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
             inputStream = this.getContentResolver().openInputStream(imageUri);
             bp = BitmapFactory.decodeStream(inputStream, null, options);
-            inputStream.close();
+            if (inputStream != null) {
+                inputStream.close();
+            }
             return bp;
 
         } catch (FileNotFoundException e) {
