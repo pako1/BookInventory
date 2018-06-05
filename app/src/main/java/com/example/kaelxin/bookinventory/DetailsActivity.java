@@ -191,7 +191,15 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             int photoWidht = options.outWidth;
             int photoHeight = options.outHeight;
 
-            int scaleFactor = Math.min(photoWidht / imageWidth, photoHeight / imageHeight);
+            int scaleFactor = 1;
+
+            if (imageWidth > photoWidht || imageHeight > photoHeight) {
+
+                float heightScale = photoHeight / imageHeight;
+                float widthScale = photoWidht / imageWidth;
+                scaleFactor = Math.round(heightScale > widthScale ? heightScale : widthScale);
+
+            }
 
             options.inJustDecodeBounds = false;
             options.inSampleSize = scaleFactor;
@@ -452,14 +460,18 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             String supplierName = cursor.getString(supplierNameCOLindex);
             String supplierPhone = cursor.getString(supplierPhoneCOLindex);
             String bookyImage = cursor.getString(bookImageCOLindex);
-            Log.e("malaka1", bookyImage);
-            Uri bookImageUri = Uri.parse(bookyImage);
+            if (bookyImage == null) {
+                bookImage.setImageResource(R.drawable.defaultimage);
+            } else {
+                Log.e("malaka1", bookyImage);
+                Uri bookImageUri = Uri.parse(bookyImage);
+                bookImage.setImageBitmap(getBitMapFromUri(bookImageUri));
+            }
             editTextBookName.setText(bookName);
             editTextQuantity.setText(String.valueOf(bookQuantity));
             editTextBookPrice.setText(String.valueOf(bookPrice));
             editTextSuppName.setText(supplierName);
             editTextSuppPhone.setText(supplierPhone);
-            bookImage.setImageBitmap(getBitMapFromUri(bookImageUri));
         }
     }
 

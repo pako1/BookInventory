@@ -52,13 +52,16 @@ public class CursorBookAdapter extends CursorAdapter {
         int quantityColIndex = cursor.getColumnIndex(BookContract.BookEntry.COL_BOOK_QUANTITY);
         int bookImageCOLIndex = cursor.getColumnIndex(BookContract.BookEntry.COL_BOOK_IMAGE);
         String imageString = cursor.getString(bookImageCOLIndex);
+        if (imageString == null) {
+            holder.bookImageView.setImageResource(R.drawable.defaultimage);
+        } else {
+            Uri imageUri = Uri.parse(imageString);
+            //get dimensions of the image
+            int imageWidth = 54;
+            int imageHeight = 54;
 
-        Uri imageUri = Uri.parse(imageString);
-        //get dimensions of the image
-        int imageWidth = 54;
-        int imageHeight = 54;
-
-        holder.bookImageView.setImageBitmap(getBitMapFromUri(context, imageUri,imageWidth,imageHeight));
+            holder.bookImageView.setImageBitmap(getBitMapFromUri(context, imageUri, imageWidth, imageHeight));
+        }
         holder.bookNameView.setText(cursor.getString(nameColIndex));
         Double price = cursor.getDouble(priceColIndex);
         String finalprice = String.valueOf(price) + context.getString(R.string.money);
@@ -86,7 +89,7 @@ public class CursorBookAdapter extends CursorAdapter {
         });
     }
 
-    private Bitmap getBitMapFromUri(Context context, Uri imageUri,int imageWidth,int imageHeight) {
+    private Bitmap getBitMapFromUri(Context context, Uri imageUri, int imageWidth, int imageHeight) {
 
         if (imageUri == null || TextUtils.isEmpty(imageUri.toString())) {
             return null;
@@ -105,8 +108,15 @@ public class CursorBookAdapter extends CursorAdapter {
             int photoWidht = options.outWidth;
             int photoHeight = options.outHeight;
 
-            int scaleFactor = Math.min(photoWidht / imageWidth, photoHeight / imageHeight);
+            int scaleFactor = 3;
 
+            if (imageWidth > photoWidht || imageHeight > photoHeight) {
+
+                float heightScale = photoHeight / imageHeight;
+                float widthScale = photoWidht / imageWidth;
+                scaleFactor = Math.round(heightScale > widthScale ? heightScale : widthScale);
+
+            }
             options.inJustDecodeBounds = false;
             options.inSampleSize = scaleFactor;
             options.inPurgeable = true;
