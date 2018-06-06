@@ -10,27 +10,36 @@
         android:layout_height="wrap_content"
         tools:context="com.example.kaelxin.bookinventory.DetailsActivity">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="190dp"
-            android:layout_height="160dp"
-            android:layout_marginEnd="@dimen/margin8"
-            android:layout_marginStart="@dimen/margin8"
-            android:layout_marginTop="@dimen/margin16"
-            android:contentDescription="@string/book_cover"
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="190dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin16"
+                android:contentDescription="@string/book_cover"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
+
+        </FrameLayout>
 
         <ImageButton
             android:id="@+id/addimagebutton"
             android:layout_width="55dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin120"
+            android:layout_marginTop="130dp"
             android:background="@drawable/ic_add_a_photo_black_24dp"
             android:contentDescription="@string/books_image_or_else_cover"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintEnd_toEndOf="@+id/frameLayout"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -38,11 +47,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin8"
-            android:layout_marginTop="@dimen/margin16"
             android:text="@string/book_name"
             android:textSize="@dimen/text16"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addimagebutton" />
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
 
         <EditText
             android:id="@+id/edit_bookname"

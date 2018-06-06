@@ -228,41 +228,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         return bp;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-
-        String bookName = editTextBookName.getText().toString().trim();
-        String bookPrice = editTextBookPrice.getText().toString().trim();
-        String bookQuantity = editTextQuantity.getText().toString().trim();
-        String supplierName = editTextSuppName.getText().toString().trim();
-        String supplierPhone = editTextSuppPhone.getText().toString().trim();
-
-        savedInstanceState.putString("BookName", bookName);
-        savedInstanceState.putString("BookPrice", bookPrice);
-        savedInstanceState.putString("BookQuantity", bookQuantity);
-        savedInstanceState.putString("SupplierName", supplierName);
-        savedInstanceState.putString("SupplierPhone", supplierPhone);
-
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        String bookName = savedInstanceState.getString("BookName");
-        String bookPrice = savedInstanceState.getString("BookPrice");
-        String bookQuantity = savedInstanceState.getString("BookQuantity");
-        String supplierName = savedInstanceState.getString("SupplierName");
-        String supplierPhone = savedInstanceState.getString("SupplierPhone");
-
-        editTextBookName.setText(bookName);
-        editTextBookPrice.setText(bookPrice);
-        editTextQuantity.setText(bookQuantity);
-        editTextSuppName.setText(supplierName);
-        editTextSuppPhone.setText(supplierPhone);
-    }
-
     //this creates the menu options
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
