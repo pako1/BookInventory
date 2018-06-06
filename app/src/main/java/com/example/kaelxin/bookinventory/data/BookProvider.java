@@ -174,13 +174,6 @@ public class BookProvider extends ContentProvider {
             return 0;
         }
 
-        if (values.containsKey(BookContract.BookEntry.COL_BOOK_IMAGE)) {
-            String bookImage = values.getAsString(BookContract.BookEntry.COL_BOOK_IMAGE);
-            if (bookImage == null) {
-                throw new IllegalArgumentException("book requires an image" + uri);
-            }
-        }
-
         //if you update a entry it could be that you dont update every single column but only a few.
         //Therefore you have to check if the specific entry is being updated .
         // This will be done when you call containsKey in the contentvalues.

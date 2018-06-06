@@ -310,8 +310,12 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         String bookQuantity = editTextQuantity.getText().toString().trim();
         String supplierName = editTextSuppName.getText().toString().trim();
         String supplierPhone = editTextSuppPhone.getText().toString().trim();
-        String imageUriBook = imageUri.toString();
-
+        String imageUriBook;
+        if (imageUri == null) {
+            imageUriBook = null;
+        } else {
+            imageUriBook = imageUri.toString();
+        }
         // if nothing no field has any input then just return.
         if (currentUri == null && TextUtils.isEmpty(bookName) && TextUtils.isEmpty(bookPrice)
                 && TextUtils.isEmpty(bookQuantity) && TextUtils.isEmpty(supplierName) && TextUtils.isEmpty(supplierPhone)
@@ -360,6 +364,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             handler.startUpdate(MAGIC_ZERO, null, currentUri, values, null, null);
             return true;
         }
+
     }
 
     private boolean isPhoneValid(String phoneNumber) {

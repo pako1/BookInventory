@@ -118,7 +118,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         values.put(BookContract.BookEntry.COL_BOOK_PRICE, price);
         values.put(BookContract.BookEntry.COL_SUPPLIER_NAME, name);
         values.put(BookContract.BookEntry.COL_SUPPLIER_PHONE, phone);
-
         myQueryHandler = new MyQueryHandler(getContentResolver());
 
         myQueryHandler.startInsert(0, null, BookContract.BookEntry.CONTENT_URI, values);
