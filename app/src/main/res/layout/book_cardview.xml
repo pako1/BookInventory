@@ -22,7 +22,7 @@
                 android:layout_marginStart="@dimen/margin8"
                 android:layout_marginTop="@dimen/margin16"
                 android:ellipsize="end"
-                android:maxLength="16"
+                android:maxLength="10"
                 android:maxLines="1"
                 android:textSize="@dimen/textname22"
                 app:layout_constraintStart_toStartOf="parent"
@@ -34,6 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin8"
+                android:layout_marginTop="8dp"
                 android:text="@string/book_price"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cv_book_name" />
@@ -43,6 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginStart="@dimen/margin8"
+                android:layout_marginTop="8dp"
                 android:maxLength="9"
                 app:layout_constraintStart_toEndOf="@+id/bookpriceid"
                 app:layout_constraintTop_toBottomOf="@+id/cv_book_name"
@@ -53,6 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin8"
+                android:layout_marginTop="8dp"
                 android:text="@string/quantity"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cv_book_price" />

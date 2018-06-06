@@ -228,6 +228,41 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         return bp;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        String bookName = editTextBookName.getText().toString().trim();
+        String bookPrice = editTextBookPrice.getText().toString().trim();
+        String bookQuantity = editTextQuantity.getText().toString().trim();
+        String supplierName = editTextSuppName.getText().toString().trim();
+        String supplierPhone = editTextSuppPhone.getText().toString().trim();
+
+        savedInstanceState.putString("BookName", bookName);
+        savedInstanceState.putString("BookPrice", bookPrice);
+        savedInstanceState.putString("BookQuantity", bookQuantity);
+        savedInstanceState.putString("SupplierName", supplierName);
+        savedInstanceState.putString("SupplierPhone", supplierPhone);
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        String bookName = savedInstanceState.getString("BookName");
+        String bookPrice = savedInstanceState.getString("BookPrice");
+        String bookQuantity = savedInstanceState.getString("BookQuantity");
+        String supplierName = savedInstanceState.getString("SupplierName");
+        String supplierPhone = savedInstanceState.getString("SupplierPhone");
+
+        editTextBookName.setText(bookName);
+        editTextBookPrice.setText(bookPrice);
+        editTextQuantity.setText(bookQuantity);
+        editTextSuppName.setText(supplierName);
+        editTextSuppPhone.setText(supplierPhone);
+    }
+
     //this creates the menu options
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -327,6 +362,10 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         }
 
         ContentValues values = new ContentValues();
+
+        values.put(BookContract.BookEntry.COL_BOOK_IMAGE, imageUriBook);
+
+
         if (bookName.equals("")) {
             editTextBookName.setError(getString(R.string.error_nedname));
             return false;
@@ -352,7 +391,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                 return false;
             }
         }
-        values.put(BookContract.BookEntry.COL_BOOK_IMAGE, imageUriBook);
 
         MyQueryHandler handler = new MyQueryHandler(getContentResolver());
 
@@ -470,6 +508,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                 bookImage.setImageResource(R.drawable.defaultimage);
             } else {
                 Uri bookImageUri = Uri.parse(bookyImage);
+                imageUri = bookImageUri;
                 bookImage.setImageBitmap(getBitMapFromUri(bookImageUri));
             }
             editTextBookName.setText(bookName);
