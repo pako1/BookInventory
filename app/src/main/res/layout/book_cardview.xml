@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="2dp">
+    android:padding="@dimen/margin2">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardview"
@@ -19,12 +19,12 @@
                 android:id="@+id/cv_book_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="@dimen/margin8"
+                android:layout_marginTop="@dimen/margin16"
                 android:ellipsize="end"
                 android:maxLength="16"
                 android:maxLines="1"
-                android:textSize="22sp"
+                android:textSize="@dimen/textname22"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/book_name" />
@@ -33,7 +33,7 @@
                 android:id="@+id/bookpriceid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/margin8"
                 android:text="@string/book_price"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cv_book_name" />
@@ -42,7 +42,7 @@
                 android:id="@+id/cv_book_price"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/margin8"
                 android:maxLength="9"
                 app:layout_constraintStart_toEndOf="@+id/bookpriceid"
                 app:layout_constraintTop_toBottomOf="@+id/cv_book_name"
@@ -52,7 +52,7 @@
                 android:id="@+id/quantity_Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/margin8"
                 android:text="@string/quantity"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cv_book_price" />
@@ -65,15 +65,15 @@
                 android:maxLength="3"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/quantity_Text"
-                tools:text="20" />
+                tools:text="@string/text20" />
 
             <ImageView
                 android:id="@+id/cv_book_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="8dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginBottom="@dimen/margin8"
+                android:layout_marginStart="@dimen/margin32"
+                android:layout_marginTop="@dimen/margin8"
                 android:contentDescription="@string/cv_image_of_the_book"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/cv_book_price"
@@ -84,15 +84,15 @@
                 android:id="@+id/buyButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginBottom="@dimen/margin8"
+                android:layout_marginEnd="@dimen/margin16"
+                android:layout_marginTop="@dimen/margin8"
                 android:background="@drawable/button_rounded_corners"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:text="@string/buy"
                 android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textSize="@dimen/text16"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -65,7 +64,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     private boolean mBookHasChanged = false;
     private int quantity_it = 0;
     private Uri imageUri;
-
 
     private View.OnTouchListener touchListener = new View.OnTouchListener() {
         @Override
@@ -164,7 +162,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
         if (requestCode == REQUEST_IMAGE_CODE && resultCode == RESULT_OK && imageData != null) {
             imageUri = imageData.getData();
-            Log.e("malaka", imageUri.toString());
             bookImage.setImageBitmap(getBitMapFromUri(imageUri));
         }
     }
@@ -186,7 +183,9 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(inputStream, null, options);
-            inputStream.close();
+            if (inputStream != null) {
+                inputStream.close();
+            }
 
             int photoWidht = options.outWidth;
             int photoHeight = options.outHeight;
@@ -207,7 +206,9 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
             inputStream = this.getContentResolver().openInputStream(imageUri);
             bp = BitmapFactory.decodeStream(inputStream, null, options);
-            inputStream.close();
+            if (inputStream != null) {
+                inputStream.close();
+            }
             return bp;
 
         } catch (FileNotFoundException e) {
@@ -468,7 +469,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             if (bookyImage == null) {
                 bookImage.setImageResource(R.drawable.defaultimage);
             } else {
-                Log.e("malaka1", bookyImage);
                 Uri bookImageUri = Uri.parse(bookyImage);
                 bookImage.setImageBitmap(getBitMapFromUri(bookImageUri));
             }
