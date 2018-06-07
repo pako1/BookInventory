@@ -61,6 +61,9 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent bookDetailsIntent = new Intent(CatalogActivity.this, DetailsActivity.class);
+                //prepei na parw to id apo thn basi kai oxi apo ton adaptora . Opote ayto poy kanw einai na paraw
+                //tin 8esi toy antikeimenoy poy egine klik kai apo ekei na ftiaxw enan cursor object
+                // na parw ap ti kolwna toy antikeimenoy ton ari8mo kai apo ekei na parw to id.
                 Cursor cursor = (Cursor) cursorBookAdapter.getItem(position);
                 int col_index = cursor.getColumnIndex(BookContract.BookEntry.COL_BOOK_ID);
                 int cursor_id = cursor.getInt(col_index);
