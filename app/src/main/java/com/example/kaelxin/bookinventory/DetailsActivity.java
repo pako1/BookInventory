@@ -64,7 +64,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     private boolean mBookHasChanged = false;
     private int quantity_it = 0;
     private Uri imageUri;
-
+    private int position;
     private View.OnTouchListener touchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -81,6 +81,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
         final Intent intent = getIntent();
         currentUri = intent.getData();
+        position = intent.getIntExtra("position", 0);
         //this means that we have a new book to insert
         if (currentUri == null) {
             setTitle(getString(R.string.new_book));
@@ -329,30 +330,37 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         ContentValues values = new ContentValues();
 
         values.put(BookContract.BookEntry.COL_BOOK_IMAGE, imageUriBook);
-
+        values.put(BookContract.BookEntry.COL_BOOK_PRICE, bookPrice);
+        values.put(BookContract.BookEntry.COL_BOOK_QUANTITY, bookQuantity);
 
         if (bookName.equals("")) {
             editTextBookName.setError(getString(R.string.error_nedname));
+            Toast.makeText(DetailsActivity.this,this.getString(R.string.error_nedname),Toast.LENGTH_LONG).show();
             return false;
         } else {
             values.put(BookContract.BookEntry.COL_BOOK_NAME, bookName);
         }
-        values.put(BookContract.BookEntry.COL_BOOK_PRICE, bookPrice);
-        values.put(BookContract.BookEntry.COL_BOOK_QUANTITY, bookQuantity);
+
         if (supplierName.equals("")) {
             editTextSuppName.setError(getString(R.string.errsupname));
+            Toast.makeText(DetailsActivity.this,this.getString(R.string.errsupname),Toast.LENGTH_LONG).show();
             return false;
         } else {
             values.put(BookContract.BookEntry.COL_SUPPLIER_NAME, supplierName);
         }
+        
         if (supplierPhone.equals("")) {
             editTextSuppPhone.setError(getString(R.string.errsupphone));
+            Toast.makeText(DetailsActivity.this,this.getString(R.string.errsupphone),Toast.LENGTH_LONG).show();
+
             return false;
         } else {
             if (isPhoneValid(supplierPhone)) {
                 values.put(BookContract.BookEntry.COL_SUPPLIER_PHONE, supplierPhone);
             } else {
                 editTextSuppPhone.setError(getString(R.string.invalphone));
+                Toast.makeText(DetailsActivity.this,this.getString(R.string.invalphone),Toast.LENGTH_LONG).show();
+
                 return false;
             }
         }
@@ -453,7 +461,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         }
         // Proceed with moving to the first row of the cursor and reading data from it
         // (This should be the only row in the cursor)
-        if (cursor.moveToFirst()) {
+        if (cursor.moveToPosition(position)) {
 
             int bookNameCOLindex = cursor.getColumnIndex(BookContract.BookEntry.COL_BOOK_NAME);
             int bookQuantityCOLindex = cursor.getColumnIndex(BookContract.BookEntry.COL_BOOK_QUANTITY);

@@ -68,6 +68,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 int col_index = cursor.getColumnIndex(BookContract.BookEntry.COL_BOOK_ID);
                 int cursor_id = cursor.getInt(col_index);
                 bookDetailsIntent.setData(ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, cursor_id));
+                bookDetailsIntent.putExtra("position",position);
                 startActivity(bookDetailsIntent);
             }
         });
