@@ -36,13 +36,10 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     FloatingActionButton fab;
 
     private CursorBookAdapter cursorBookAdapter;
-
     private static final int BOOK_LOADER = 0;
-
     private MyQueryHandler myQueryHandler;
 
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.catalog_activity);
@@ -55,22 +52,24 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 startActivity(detailsIntent);
             }
         });
+
         listView.setEmptyView(emptyView);
         cursorBookAdapter = new CursorBookAdapter(this, null);
         listView.setAdapter(cursorBookAdapter);
-
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent bookDetailsIntent = new Intent(CatalogActivity.this, DetailsActivity.class);
-                bookDetailsIntent.setData(ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, id));
+                Cursor cursor = (Cursor) cursorBookAdapter.getItem(position);
+                int col_index = cursor.getColumnIndex(BookContract.BookEntry.COL_BOOK_ID);
+                int cursor_id = cursor.getInt(col_index);
+                bookDetailsIntent.setData(ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, cursor_id));
                 startActivity(bookDetailsIntent);
             }
         });
 
         getLoaderManager().initLoader(BOOK_LOADER, null, this);
-
     }
 
     @Override

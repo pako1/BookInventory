@@ -385,7 +385,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     private void showDeleteConfirmationDialog() {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-
         alertDialogBuilder.setMessage(R.string.sure_todo);
         alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
